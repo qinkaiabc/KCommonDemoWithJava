@@ -1,5 +1,7 @@
 package com.blackflagbin.kcommondemowithjava.ui.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
@@ -69,11 +71,7 @@ public class WebActivity extends BaseActivity<ApiService, CacheService, WebPrese
         rl_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (webView.canGoBack()) {
-                    webView.goBack();
-                } else {
-                    finish();
-                }
+                finish();
             }
         });
         tv_middle.setText(mTitle);
@@ -100,8 +98,18 @@ public class WebActivity extends BaseActivity<ApiService, CacheService, WebPrese
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 mUrl = url;
-                view.loadUrl(mUrl);
-                return true;
+                try {
+                    if (url.startsWith("http:") || url.startsWith("https:")) {
+                        view.loadUrl(url);
+                        return true;
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                        return true;
+                    }
+                } catch (Exception e) { //防止crash (如果手机上没有安装处理某个scheme开头的url的APP, 会导致crash)
+                    return false;
+                }
             }
         });
     }

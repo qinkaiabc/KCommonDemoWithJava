@@ -43,7 +43,7 @@ public class MainPageFragment extends
 
     @Nullable
     @Override
-    protected BaseQuickAdapter<?, ?> getAdapter() {
+    protected BaseQuickAdapter getAdapter() {
         return new MainPageAdapter(new ArrayList<DataItem>());
     }
 
