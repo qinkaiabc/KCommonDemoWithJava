@@ -1,22 +1,28 @@
 package com.blackflagbin.kcommondemowithjava.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.blackflagbin.kcommon.base.BaseRefreshAndLoadMoreFragment;
+import com.blackflagbin.kcommon.widget.FixedLinearLayoutManager;
 import com.blackflagbin.kcommondemowithjava.R;
 import com.blackflagbin.kcommondemowithjava.common.entity.net.DataItem;
 import com.blackflagbin.kcommondemowithjava.common.http.ApiService;
 import com.blackflagbin.kcommondemowithjava.common.http.CacheService;
 import com.blackflagbin.kcommondemowithjava.mvp.contract.MainPageContract;
 import com.blackflagbin.kcommondemowithjava.mvp.presenter.MainPagePresenter;
+import com.blackflagbin.kcommondemowithjava.ui.activity.WebActivity;
+import com.blackflagbin.kcommondemowithjava.ui.adapter.listadapter.MainPageAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.kennyc.view.MultiStateView;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,31 +44,31 @@ public class MainPageFragment extends
     @Nullable
     @Override
     protected BaseQuickAdapter<?, ?> getAdapter() {
-        return null;
+        return new MainPageAdapter(new ArrayList<DataItem>());
     }
 
     @Nullable
     @Override
     protected RecyclerView getRecyclerView() {
-        return null;
+        return getMRootView().findViewById(R.id.rv_list);
     }
 
     @Nullable
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        return null;
+        return new FixedLinearLayoutManager(getActivity());
     }
 
     @Nullable
     @Override
     protected SwipeRefreshLayout getSwipeRefreshView() {
-        return null;
+        return getMRootView().findViewById(R.id.swipe_refresh);
     }
 
     @Nullable
     @Override
     protected MultiStateView getMultiStateView() {
-        return null;
+        return getMRootView().findViewById(R.id.multi_state_view);
     }
 
     @Override
@@ -84,6 +90,15 @@ public class MainPageFragment extends
 
     @Override
     protected void showContentView(List<DataItem> dataItems) {
-
+        getMAdapter().setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Bundle bundle = new Bundle();
+                DataItem item = (DataItem) getMAdapter().getData().get(position);
+                bundle.putString("url", item.url);
+                bundle.putString("title", item.desc);
+                startActivity(WebActivity.class, bundle);
+            }
+        });
     }
 }

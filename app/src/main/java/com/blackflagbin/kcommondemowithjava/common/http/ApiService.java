@@ -1,5 +1,6 @@
 package com.blackflagbin.kcommondemowithjava.common.http;
 
+import com.blackflagbin.kcommondemowithjava.BuildConfig;
 import com.blackflagbin.kcommondemowithjava.common.entity.net.DataItem;
 import com.blackflagbin.kcommondemowithjava.common.entity.net.HttpResultEntity;
 
@@ -15,7 +16,7 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @GET("${BuildConfig.EXTRA_URL}search/query/listview/category/{type}/count/{limit}/page/{pageNo} ")
-    public Observable<HttpResultEntity<List<DataItem>>> getMainDataList(
+    @GET(BuildConfig.EXTRA_URL + "search/query/listview/category/{type}/count/{limit}/page/{pageNo} ")
+    Observable<HttpResultEntity<List<DataItem>>> getMainDataList(
             @Path("type") String type, @Path("limit") int limit, @Path("pageNo") int pageNo);
 }

@@ -16,7 +16,7 @@ import io.rx_cache2.LifeCache;
 
 public interface CacheService {
     @LifeCache(duration = 10, timeUnit = TimeUnit.MINUTES)
-    public Observable<List<DataItem>> getMainDataList(
+    Observable<List<DataItem>> getMainDataList(
             Observable<List<DataItem>> observable, DynamicKeyGroup keyGroup, EvictDynamicKeyGroup evictDynamicKeyGroup);
 
 }

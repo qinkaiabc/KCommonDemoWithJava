@@ -39,7 +39,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         CommonLibrary.Companion.getInstance()
-                .initLibrary(this, "http://gank.io", ApiService.class, CacheService.class, "KCommonDemoWithJava", BuildConfig.DEBUG, START_PAGE,
+                .initLibrary(this, BuildConfig.APP_URL, ApiService.class, CacheService.class, "KCommonDemoWithJava", BuildConfig.DEBUG, START_PAGE,
                         PAGE_SIZE, null, null, null, null, null, null);
     }
 }

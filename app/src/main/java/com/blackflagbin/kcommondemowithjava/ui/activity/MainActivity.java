@@ -1,5 +1,6 @@
 package com.blackflagbin.kcommondemowithjava.ui.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +17,7 @@ import com.blackflagbin.kcommondemowithjava.common.http.ApiService;
 import com.blackflagbin.kcommondemowithjava.common.http.CacheService;
 import com.blackflagbin.kcommondemowithjava.mvp.contract.MainContract;
 import com.blackflagbin.kcommondemowithjava.mvp.presenter.MainPresenter;
+import com.blackflagbin.kcommondemowithjava.ui.adapter.pageradapter.MainPagerAdapter;
 import com.blankj.utilcode.util.CacheUtils;
 import com.bumptech.glide.Glide;
 import com.kennyc.view.MultiStateView;
@@ -28,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class MainActivity extends BaseActivity<ApiService, CacheService, MainPresenter, Object> implements MainContract.IMainView {
 
 
-    private static String   AVATAR_URL       = "https://avatars2.githubusercontent" + "" + "" + "" + "" + "" + "" + "" +
+    private static String   AVATAR_URL       = "https://avatars2.githubusercontent" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" +
             ".com/u/17843145?s=400&u=d417a5a50d47426c0f0b6b9ff64d626a36bf0955&v=4";
     private static String   ABOUT_ME_URL     = "https://github.com/BlackFlagBin";
     private static String   READ_ME_URL      = "https://github.com/BlackFlagBin/KCommonProject/blob/master/README.md";
@@ -39,9 +41,9 @@ public class MainActivity extends BaseActivity<ApiService, CacheService, MainPre
     private TabLayout      tl_type;
     private ViewPager      vp_content;
     private MultiStateView multi_state_view;
-    private View      ll_read_me;
-    private View      ll_more_project;
-    private View      ll_clear_cache;
+    private View           ll_read_me;
+    private View           ll_more_project;
+    private View           ll_clear_cache;
 
     @Nullable
     @Override
@@ -71,23 +73,31 @@ public class MainActivity extends BaseActivity<ApiService, CacheService, MainPre
         super.initView();
         findView();
         setupSlidingView();
+        setupViewPager();
         rl_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity();
-            }
+                Bundle bundle = new Bundle();
+                bundle.putString("url",ABOUT_ME_URL);
+                bundle.putString("title","关于作者");
+                startActivity(WebActivity.class,bundle);            }
         });
         ll_read_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity();
+                Bundle bundle = new Bundle();
+                bundle.putString("url",READ_ME_URL);
+                bundle.putString("title","ReadMe");
+                startActivity(WebActivity.class,bundle);
             }
         });
         ll_more_project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity();
-            }
+                Bundle bundle = new Bundle();
+                bundle.putString("url",MORE_PROJECT_URL);
+                bundle.putString("title","更多项目");
+                startActivity(WebActivity.class,bundle);            }
         });
         ll_clear_cache.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +155,9 @@ public class MainActivity extends BaseActivity<ApiService, CacheService, MainPre
     }
 
     private void setupViewPager() {
-        //vp_content.setAdapter();
+        vp_content.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+        tl_type.setupWithViewPager(vp_content);
+        vp_content.setOffscreenPageLimit(mTypeArray.length - 1);
     }
 
     private void clearCache() {

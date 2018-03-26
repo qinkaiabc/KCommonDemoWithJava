@@ -11,10 +11,42 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+    aaptOptions {
+        cruncherEnabled false
+    }
+    lintOptions {
+        abortOnError false
+    }
+    signingConfigs {
         release {
+            storeFile file('key.jks')
+            storePassword "123456"
+            keyAlias "kcommonwithjava"
+            keyPassword "123456"
+        }
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "APP_URL", "\"http://gank.io/\""
+            buildConfigField "String", "EXTRA_URL", "\"api/\""
             minifyEnabled false
+            def appName = "kcommonwithjava"
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [APPLICATION_NAME: "${appName}"]
+        }
+        release {
+            buildConfigField "String", "APP_URL", "\"http://gank.io/\""
+            buildConfigField "String", "EXTRA_URL", "\"api/\""
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            def appName = "kcommonwithjava"
+            manifestPlaceholders = [APPLICATION_NAME: "${appName}"]
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
